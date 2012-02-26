@@ -116,15 +116,6 @@ class Client {
     curl_setopt($this->_ch, CURLOPT_USERAGENT, $this->useragent);
   }
   
-
-  protected function getInfo() {
-    return curl_getinfo($this->ch);
-  }
-  
-  protected function getResponse() {
-    return curl_exec($this->ch);
-  }
-  
   /**
    * GET request 
    * @param string $path
