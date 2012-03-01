@@ -43,10 +43,11 @@ class Client {
   }
   
   private function _runCurl() {
-    $response = curl_exec($this->_ch);
-    $info     = curl_getinfo($this->_ch);
-    list($this->_response['header'], $this->_response['body']) = explode("\r\n\r\n", $response, 2);
-    $this->_response['http_code'] = $info['http_code'];
+    $response   = curl_exec($this->_ch);
+    $headerSize = curl_getinfo($this->_ch, CURLINFO_HEADER_SIZE);
+    $this->_response['http_code'] = curl_getinfo($this->_ch, CURLINFO_HTTP_CODE);
+    $this->_response['header'] = substr($response, 0, $headerSize);
+    $this->_response['body'] = substr($response, $headerSize);
   }
   
   public function __construct($url = null, $userAgent = 'RestHttpClient/curl PHP 5.x') {
