@@ -23,6 +23,11 @@ class Client {
    */  
   private $_response = array();
 
+  /**
+   * Getter function for the object
+   * @param string name
+   * @return mixed
+   */
   public function __get($name)
   {
       if (array_key_exists($name, $this->_response)) {
@@ -30,26 +35,12 @@ class Client {
       }
       return null;
   }
-  
-  private function _openCurl() {
-    $this->_ch = curl_init();
-    curl_setopt($this->_ch, CURLOPT_HEADER, TRUE);
-    curl_setopt($this->_ch, CURLOPT_CRLF, TRUE);
-    curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, TRUE);
-  }
-  
-  private function _closeCurl() {
-    curl_close($this->_ch);
-  }
-  
-  private function _runCurl() {
-    $response   = curl_exec($this->_ch);
-    $headerSize = curl_getinfo($this->_ch, CURLINFO_HEADER_SIZE);
-    $this->_response['http_code'] = curl_getinfo($this->_ch, CURLINFO_HTTP_CODE);
-    $this->_response['header'] = substr($response, 0, $headerSize);
-    $this->_response['body'] = substr($response, $headerSize);
-  }
-  
+
+  /**
+   * Constructor
+   * @param string url
+   * @param string userAgent
+   */  
   public function __construct($url = null, $userAgent = 'RestHttpClient/curl PHP 5.x') {
     $this->_openCurl();
     $this->setUrl($url);
@@ -58,32 +49,8 @@ class Client {
   
   public function __destruct() {
     $this->_closeCurl();
-  }   
-
-  private function _initUrl($path, $params = null) {
-    if ($params) {
-      curl_setopt($this->_ch, CURLOPT_URL, "{$this->_url}{$path}?" . http_build_query($params));
-    } else {
-      curl_setopt($this->_ch, CURLOPT_URL, "{$this->_url}{$path}");
-    }
   }
   
-  private function _initHttpHeader($header) {
-    if ($header) {
-      curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $header);
-    }
-  }
-  
-  private function _initPostFields($params = null) {
-    if (is_array($params)) {
-      curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $params);
-    } elseif ($params!=null) {
-      curl_setopt($this->_ch, CURLOPT_POSTFIELDS, '@' . $params);
-    } else {
-      curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $params);
-    }
-  }
-
   /**
    * Get request url
    * @return string
@@ -180,5 +147,49 @@ class Client {
     $this->_initUrl($path);
     $this->_runCurl();
     return $this->_response;
+  }
+  
+  
+  private function _openCurl() {
+    $this->_ch = curl_init();
+    curl_setopt($this->_ch, CURLOPT_HEADER, TRUE);
+    curl_setopt($this->_ch, CURLOPT_CRLF, TRUE);
+    curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, TRUE);
+  }
+  
+  private function _closeCurl() {
+    curl_close($this->_ch);
+  }
+  
+  private function _runCurl() {
+    $response   = curl_exec($this->_ch);
+    $headerSize = curl_getinfo($this->_ch, CURLINFO_HEADER_SIZE);
+    $this->_response['http_code'] = curl_getinfo($this->_ch, CURLINFO_HTTP_CODE);
+    $this->_response['header'] = substr($response, 0, $headerSize);
+    $this->_response['body'] = substr($response, $headerSize);
+  }
+
+  private function _initUrl($path, $params = null) {
+    if ($params) {
+      curl_setopt($this->_ch, CURLOPT_URL, "{$this->_url}{$path}?" . http_build_query($params));
+    } else {
+      curl_setopt($this->_ch, CURLOPT_URL, "{$this->_url}{$path}");
+    }
+  }
+  
+  private function _initHttpHeader($header) {
+    if ($header) {
+      curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $header);
+    }
+  }
+  
+  private function _initPostFields($params = null) {
+    if (is_array($params)) {
+      curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $params);
+    } elseif ($params!=null) {
+      curl_setopt($this->_ch, CURLOPT_POSTFIELDS, '@' . $params);
+    } else {
+      curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $params);
+    }
   }
 }
