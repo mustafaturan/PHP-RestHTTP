@@ -132,6 +132,23 @@ class Client {
     $this->_runCurl();
     return $this->_response;
   }
+  
+
+  /**
+   * PATCH request 
+   * @param string $path
+   * @param array $header
+   * @param array|string $params
+   * @return array
+   */  
+  public function patch($path, $header = null, $params = null) {
+    curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+    $this->_initPostFields($params);
+    $this->_initHttpHeader($header);
+    $this->_initUrl($path);
+    $this->_runCurl();
+    return $this->_response;
+  }
 
   /**
    * DELETE request 
