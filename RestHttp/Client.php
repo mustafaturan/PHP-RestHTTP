@@ -170,7 +170,6 @@ class Client {
   private function _openCurl() {
     $this->_ch = curl_init();
     curl_setopt($this->_ch, CURLOPT_HEADER, TRUE);
-    curl_setopt($this->_ch, CURLOPT_CRLF, TRUE);
     curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, TRUE);
   }
   
