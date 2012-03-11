@@ -103,8 +103,8 @@ class Client {
    */  
   public function setCookieFile($value) {
     $this->_cookieFile = $value;
-    curl_setopt ( $this->ch, CURLOPT_COOKIEFILE, $value );
-    curl_setopt ( $this->ch, CURLOPT_COOKIEJAR, $value );
+    curl_setopt ( $this->_ch, CURLOPT_COOKIEFILE, $value );
+    curl_setopt ( $this->_ch, CURLOPT_COOKIEJAR, $value );
   }
   
   /**
