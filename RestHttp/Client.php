@@ -22,6 +22,11 @@ class Client {
    * @var array http response with body and header including http_code
    */  
   private $_response = array();
+  
+  /**
+   * @var string file path for the cookie file
+   */
+   private $_cookieFile;
 
   /**
    * Getter function for the object
@@ -82,6 +87,24 @@ class Client {
   public function setUserAgent($value) {
     $this->_userAgent = $value;
     curl_setopt($this->_ch, CURLOPT_USERAGENT, $this->useragent);
+  }
+
+  /**
+   * Get request cookie file
+   * @return string
+   */
+  public function getCookieFile() {
+    return $this->_cookieFile;
+  }
+
+  /**
+   * Set request cookie file
+   * @param string value
+   */  
+  public function setCookieFile($value) {
+    $this->_cookieFile = $value;
+    curl_setopt ( $this->ch, CURLOPT_COOKIEFILE, $value );
+    curl_setopt ( $this->ch, CURLOPT_COOKIEJAR, $value );
   }
   
   /**
